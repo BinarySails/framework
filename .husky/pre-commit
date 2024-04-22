@@ -1,1 +1,2 @@
-bun test
+bun run prettier:check;
+bun run lint:check
