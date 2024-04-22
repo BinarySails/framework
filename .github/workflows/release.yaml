@@ -1,0 +1,42 @@
+name: release
+
+on:
+  workflow_run:
+    workflows: ["code checks"]
+    branches: ["master"]
+    types:
+      - completed
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: "Release"
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    env:
+      HUSKY: "0"
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup
+        name: Set up environment
+
+      - name: Creating .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            //npm.pkg.github.com/:_authToken=$NPM_TOKEN
+          EOF
+        env:
+          NPM_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: Setting up no script execution for PR creation
+        run: |
+          rm -rf .git/hooks
+
+      - name: Create Release Pull Request
+        uses: changesets/action@v1
+        with:
+          publish: bun run publish-packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
