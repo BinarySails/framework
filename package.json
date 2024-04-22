@@ -1,17 +1,27 @@
 {
-  "name": "framework",
+  "name": "@binarysails/framework",
   "version": "0.0.1",
-  "main": "src/index.tsx",
-  "types": "src/index.tsx",
+  "description": "Binary Sails Framework",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "files": [
+    "build",
+    "src",
+    "package.json"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": "https://github.com/BinarySails/framework",
   "scripts": {
-    "lint": "eslint .",
-    "generate:component": "turbo gen react-component"
+    "build": "tsup src/index.ts --format cjs --dts -d build --sourcemap --minify terser"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.5",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@headlessui/react": "latest",
+    "@react-oauth/google": "^0.12.1",
     "axios": "^1.3.4",
     "classnames": "^2.3.2",
     "eslint": "^7.32.0",
@@ -22,19 +32,21 @@
     "react-hot-toast": "^2.4.1",
     "react-phone-input-2": "^2.15.1",
     "react-remove-scroll": "^2.5.7",
+    "rrule": "^2.8.1",
     "swr": "^2.2.4",
     "urlcat": "^3.1.0",
     "use-immer": "^0.9.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {
+    "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@turbo/gen": "^1.10.12",
+    "@types/mixpanel-browser": "2.47.5",
     "@types/node": "^20.5.2",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "typescript": "^5.3.2",
     "postcss": "^8.4.29",
     "tailwindcss": "^3.3.3",
-    "@types/mixpanel-browser": "2.47.5"
+    "typescript": "^5.3.2"
   }
 }

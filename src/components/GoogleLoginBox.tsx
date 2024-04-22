@@ -1,7 +1,7 @@
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 export function GoogleLoginBox({
   onClick,
