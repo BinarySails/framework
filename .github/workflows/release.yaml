@@ -3,7 +3,7 @@ name: release
 on:
   workflow_run:
     workflows: ["code checks"]
-    branches: ["master"]
+    branches: ["main"]
     types:
       - completed
 
