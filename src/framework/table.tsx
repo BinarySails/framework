@@ -264,15 +264,15 @@ export function Table<T>({
                   onDelete={
                     onRowDelete
                       ? () => {
-                        onRowDelete(item, index, id);
-                      }
+                          onRowDelete(item, index, id);
+                        }
                       : undefined
                   }
                   onEdit={
                     onRowEdit
                       ? () => {
-                        onRowEdit(item, index, id);
-                      }
+                          onRowEdit(item, index, id);
+                        }
                       : undefined
                   }
                   values={item}

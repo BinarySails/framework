@@ -14,7 +14,13 @@
   },
   "repository": "https://github.com/BinarySails/framework",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --dts -d build --sourcemap --minify terser"
+    "build": "tsup src/index.ts --format cjs --dts -d build --sourcemap --minify terser",
+    "prettier:write": "prettier --write .",
+    "prettier:check": "prettier --check .",
+    "lint:check": "eslint src/**/*.tsx",
+    "lint:fix": "eslint src/**/*.tsx --fix",
+    "publish-packages": "bun run build && changeset version && changeset publish",
+    "prepare": "husky"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.5",
@@ -24,7 +30,6 @@
     "@react-oauth/google": "^0.12.1",
     "axios": "^1.3.4",
     "classnames": "^2.3.2",
-    "eslint": "^7.32.0",
     "immer": "^10.0.3",
     "mixpanel-browser": "2.48.1",
     "next": "^14.1.0",
@@ -39,13 +44,23 @@
     "zod": "^3.23.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@turbo/gen": "^1.10.12",
     "@types/mixpanel-browser": "2.47.5",
     "@types/node": "^20.5.2",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^7.7.1",
+    "@typescript-eslint/parser": "^7.7.1",
+    "eslint": "^9.1.1",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "husky": "^9.0.11",
     "postcss": "^8.4.29",
+    "prettier": "^3.2.5",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.3.2"
   }

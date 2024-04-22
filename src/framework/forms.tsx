@@ -229,8 +229,8 @@ function _ComboboxField({
     filter
       ? filter(query ?? "", it.value, it.label)
       : (it.label || it.value)
-        .toLowerCase()
-        .includes(query?.toLowerCase() ?? ""),
+          .toLowerCase()
+          .includes(query?.toLowerCase() ?? ""),
   );
 
   const handleOptionClick = (value: { value: string; label?: string }) => {
@@ -451,7 +451,7 @@ export function UComboxFieldAsync({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if(preFetchAll) fetchOptions("").then(setOptions).catch(console.error);
+    if (preFetchAll) fetchOptions("").then(setOptions).catch(console.error);
   }, []);
 
   useDebounce(
@@ -499,9 +499,9 @@ export function ComboxFieldAsync({
   const value = name
     ? getValue<string>(name)
     : {
-      value: props.value,
-      label: props.label,
-    };
+        value: props.value,
+        label: props.label,
+      };
 
   const [defaultValue, setDefaultValue] = useState<
     { value: string; label?: string } | undefined
@@ -1091,7 +1091,7 @@ interface ContextProps {
 
 const Context = createContext<ContextProps>({
   values: {},
-  setValue: () => { },
+  setValue: () => {},
 });
 
 export const Form = forwardRef<
@@ -1341,31 +1341,31 @@ export function useForm() {
       props: InputHTMLAttributes<unknown>,
       preprocess?: (value: string) => unknown,
     ) =>
-      (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
-        props.onChange?.(e);
-        if (props.name) {
-          const target = e.target.value;
-          let value: unknown;
+    (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
+      props.onChange?.(e);
+      if (props.name) {
+        const target = e.target.value;
+        let value: unknown;
 
-          if (preprocess) {
-            if (target.length === 0) {
-              value = undefined;
-            } else {
-              value = preprocess(e.target.value);
-            }
+        if (preprocess) {
+          if (target.length === 0) {
+            value = undefined;
           } else {
-            value = target;
+            value = preprocess(e.target.value);
           }
-
-          if (setValue)
-            setValue(props.name, {
-              value,
-              // @ts-expect-error -- we know it's there, otherwise will be just undefined
-              label: e.target.selectedOptions?.[0]?.label ?? e.target.value,
-              touched: true,
-            });
+        } else {
+          value = target;
         }
-      };
+
+        if (setValue)
+          setValue(props.name, {
+            value,
+            // @ts-expect-error -- we know it's there, otherwise will be just undefined
+            label: e.target.selectedOptions?.[0]?.label ?? e.target.value,
+            touched: true,
+          });
+      }
+    };
 
   function getValue<T>(key: string) {
     return values[key] as FormEntry<T> | undefined;
