@@ -1,0 +1,59 @@
+name: code checks
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup
+        name: Set up environment
+
+      - run: bun run lint:check
+
+  codespell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run CodeSpell
+        uses: codespell-project/actions-codespell@v1.0
+        with:
+          check_filenames: true
+          ignore_words_file: .codespellignore
+          skip: package-lock.json,*.pdf,yarn.lock,package.json,bun.lockb
+          only_warn: 1
+
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup
+        name: Set up environment
+
+      - run: bun run prettier:check
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup
+        name: Set up environment
+
+      - name: Setup Docker
+        uses: docker-practice/actions-setup-docker@master
+
+      - run: bun run build
+        name: Building Packages
