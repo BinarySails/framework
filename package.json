@@ -7,7 +7,9 @@
   "files": [
     "build",
     "src",
-    "package.json"
+    "package.json",
+    "tailwind.config.js",
+    "postcss.config.js"
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
