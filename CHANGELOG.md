@@ -1,5 +1,11 @@
 # @binarysails/framework
 
+## 1.1.0
+
+### Minor Changes
+
+- a7ff4b9: Added tabs to framework
+
 ## 1.0.2
 
 ### Patch Changes
