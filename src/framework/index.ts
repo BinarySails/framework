@@ -9,3 +9,4 @@ export * from "./params";
 export * from "./small-box";
 export * from "./modal";
 export * from "./hidden-option-checkbox";
+export * from "./tabs";
