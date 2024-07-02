@@ -23,7 +23,7 @@ function usePolling<Data>(
   const [error, setError] = useState<Error | null>(null);
 
   // we use ref instead of state to avoid re-rendering
-  const intervalId = useRef<NodeJS.Timeout>();
+  const intervalId = useRef<NodeJS.Timeout | Timer>();
 
   // eslint-disable-next-line react-hooks/rules-of-hooks -- a
   const onErrorCallback = onError && useCallback(onError, []);
@@ -54,6 +54,7 @@ function usePolling<Data>(
     const pollInterval = setInterval(() => {
       void pollData().then();
     }, interval);
+
     intervalId.current = pollInterval;
 
     void pollData().then(); // Call immediately when hook is first used.
