@@ -54,6 +54,7 @@ function usePolling<Data>(
     const pollInterval = setInterval(() => {
       void pollData().then();
     }, interval);
+
     intervalId.current = pollInterval;
 
     void pollData().then(); // Call immediately when hook is first used.

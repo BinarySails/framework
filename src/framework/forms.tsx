@@ -153,6 +153,7 @@ export interface ComboBoxFieldProps {
   value?: string;
   label?: string;
   onClickShowAll?: boolean;
+  onReachEnd?: () => void;
 }
 
 function _ComboboxField({
@@ -169,6 +170,7 @@ function _ComboboxField({
   disabled,
   value: valueFromProps,
   onClickShowAll,
+  onReachEnd,
   label: propsLabel,
 }: ComboBoxFieldProps) {
   const [unManagedValue, setValue] = useState<string | undefined>(
@@ -234,12 +236,12 @@ function _ComboboxField({
   );
 
   const handleOptionClick = (value: { value: string; label?: string }) => {
+    setOpen(() => false);
     setHoverIndex(null);
     if (setValue) setValue(value.value);
     //setQuery(value.label ?? value.value);
     setLabel(value.label ?? value.value);
     onQueryChange?.(value.label ?? value.value);
-    setOpen(false);
     onChange?.(value.value, value.label, () => {
       setQuery("");
       if (setValue) setValue(undefined);
@@ -312,12 +314,14 @@ function _ComboboxField({
           }
         }}
         onFocus={() => {
-          if (withAddButton) {
-            if (!value) setOpen(true);
-          }
+          if (!value) {
+            if (withAddButton) {
+              setOpen(true);
+            }
 
-          if (onClickShowAll) {
-            setOpen(true);
+            if (onClickShowAll) {
+              setOpen(true);
+            }
           }
         }}
         placeholder={placeholder}
@@ -334,6 +338,15 @@ function _ComboboxField({
             style={floatingStyles}
             {...getFloatingProps()}
             className="border border-gray-400 shadow-lg rounded-lg bg-white w-full overflow-auto z-50"
+            onScroll={(e) => {
+              const delta =
+                e.currentTarget.scrollHeight - e.currentTarget.offsetHeight;
+              const isEnd = e.currentTarget.scrollTop - delta > 1;
+
+              if (isEnd) {
+                onReachEnd?.();
+              }
+            }}
           >
             <div className="flex flex-col p-1 gap-2">
               {withAddButton && !value ? (
@@ -773,6 +786,22 @@ export const RawField = forwardRef(function RawField(
       onChange={proxyOnChange(props)}
       value={props.name ? getValue<string>(props.name)?.value : props.value}
     />
+  );
+});
+
+export const CustomLabelField = forwardRef<
+  HTMLInputElement,
+  { label: ReactNode } & InputHTMLAttributes<HTMLInputElement>
+>(function LabeledField({ label, ...props }, ref) {
+  return (
+    <div className="flex h-[34px] w-full rounded-lg border border-gray-400 border-b-gray-500">
+      <div className="border-r py-1 px-3 flex items-center justify-center">
+        {label}
+      </div>
+      <div className="py-1 px-2 w-full">
+        <input className="w-full focus:outline-none" {...props} ref={ref} />
+      </div>
+    </div>
   );
 });
 
