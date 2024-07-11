@@ -1,5 +1,18 @@
 # @binarysails/framework
 
+## 1.1.2
+
+### Patch Changes
+
+- d56649a: Fixed the type imports for bun
+- af63b4b: Fixed Combobox which was not closing when onClickShow all was present.
+
+## 1.1.1
+
+### Patch Changes
+
+- 7f0a24d: Fixed the export of tabs
+
 ## 1.1.0
 
 ### Minor Changes
