@@ -25,7 +25,7 @@ import {
   FlatButtonConfirmation,
   FlatButtonConfirmationProps,
 } from "../components/FlatButton";
-import { useImmer } from "use-immer";
+import { Updater, useImmer } from "use-immer";
 import {
   offset,
   size,
@@ -43,6 +43,7 @@ import es from "react-phone-input-2/lang/es.json";
 import { useDebounce } from "../hooks/use-debounce";
 import { useEscape } from "../hooks/use-esc";
 import { Transition, Dialog } from "@headlessui/react";
+import { Update } from "next/dist/build/swc";
 
 export function WeekDayPicker(props: {
   name?: string;
@@ -231,8 +232,8 @@ function _ComboboxField({
     filter
       ? filter(query ?? "", it.value, it.label)
       : (it.label || it.value)
-          .toLowerCase()
-          .includes(query?.toLowerCase() ?? ""),
+        .toLowerCase()
+        .includes(query?.toLowerCase() ?? ""),
   );
 
   const handleOptionClick = (value: { value: string; label?: string }) => {
@@ -431,6 +432,16 @@ export function ComboboxField({ name, ...props }: ComboBoxFieldWithName) {
     props.onChange?.(value, label, clear);
   };
 
+  const handleOnClear = () => {
+    if (name && setValue)
+      setValue(name, {
+        value: "",
+        label: "",
+        touched: false,
+      });
+    props.onClear?.();
+  };
+
   return (
     // eslint-disable-next-line react/jsx-pascal-case -- a
     <_ComboboxField
@@ -440,6 +451,7 @@ export function ComboboxField({ name, ...props }: ComboBoxFieldWithName) {
       }
       placeholder="Selecciona una opción"
       onChange={handleOnChange}
+      onClear={handleOnClear}
     />
   );
 }
@@ -512,9 +524,9 @@ export function ComboxFieldAsync({
   const value = name
     ? getValue<string>(name)
     : {
-        value: props.value,
-        label: props.label,
-      };
+      value: props.value,
+      label: props.label,
+    };
 
   const [defaultValue, setDefaultValue] = useState<
     { value: string; label?: string } | undefined
@@ -586,29 +598,34 @@ export function UDropdown({
   }, [props.name]);
 
   return (
-    <select
-      className={cn(
-        "p-1 min-h-[34px] w-full bg-white rounded-lg border border-gray-400 border-b-gray-500",
-        className,
-      )}
-      {...props}
-      onChange={(e) => {
-        onChange?.(e.target.value, e.target.selectedOptions[0].label);
-      }}
-      ref={ref}
-      value={value}
-    >
-      {withoutDefault ? (
-        <option disabled selected value="">
-          Selecciona una opción
-        </option>
-      ) : null}
-      {options.map((it) => (
-        <option key={it.id} value={it.id}>
-          {it.label ?? it.id}
-        </option>
-      ))}
-    </select>
+    <div className="relative max-h-[34px] w-full">
+      <div className="absolute top-0 right-0 h-full p-1 px-2 touch-none pointer-events-none">
+        <FontAwesomeIcon icon={faChevronDown} />
+      </div>
+      <select
+        className={cn(
+          "p-1 px-2 w-[inherit] h-full bg-white rounded-lg border border-gray-400 border-b-gray-500 appearance-none active:outline-none focus:outline-none",
+          className,
+        )}
+        {...props}
+        onChange={(e) => {
+          onChange?.(e.target.value, e.target.selectedOptions[0].label);
+        }}
+        ref={ref}
+        value={value}
+      >
+        {withoutDefault ? (
+          <option disabled selected value="">
+            Selecciona una opción
+          </option>
+        ) : null}
+        {options.map((it) => (
+          <option key={it.id} value={it.id}>
+            {it.label ?? it.id}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 }
 
@@ -644,13 +661,13 @@ export function Dropdown({
   }, [props.name]);
 
   return (
-    <div className="relative min-h-[34px] w-full">
+    <div className="relative max-h-[34px] w-full">
       <div className="absolute top-0 right-0 h-full p-1 px-2 touch-none pointer-events-none">
         <FontAwesomeIcon icon={faChevronDown} />
       </div>
       <select
         className={cn(
-          "p-1 px-2 w-[inherit] h-[inherit] bg-white rounded-lg border border-gray-400 border-b-gray-500 appearance-none active:outline-none focus:outline-none",
+          "p-1 px-2 w-[inherit] h-full bg-white rounded-lg border border-gray-400 border-b-gray-500 appearance-none active:outline-none focus:outline-none",
           className,
         )}
         ref={ref}
@@ -776,7 +793,7 @@ export const RawField = forwardRef(function RawField(
       {...props}
       ref={ref}
       className={cn(
-        "p-1 px-2 h-[34px] w-full rounded-lg border border-gray-400 border-b-gray-500 focus:outline-none",
+        "p-1 px-2 max-h-[34px] w-full rounded-lg border border-gray-400 border-b-gray-500 focus:outline-none",
         {
           ["bg-gray-100 cursor-not-allowed"]: props.disabled,
           ["bg-white"]: !props.disabled,
@@ -1120,7 +1137,7 @@ interface ContextProps {
 
 const Context = createContext<ContextProps>({
   values: {},
-  setValue: () => {},
+  setValue: () => { },
 });
 
 export const Form = forwardRef<
@@ -1261,7 +1278,7 @@ export function FormBox({
               </div>
             )}
           </div>
-          <div className="flex overflow-auto flex-col gap-2 p-5">
+          <div className="flex overflow-auto flex-col gap-2 p-5 px-4">
             <Context.Provider
               value={{
                 values,
@@ -1370,31 +1387,31 @@ export function useForm() {
       props: InputHTMLAttributes<unknown>,
       preprocess?: (value: string) => unknown,
     ) =>
-    (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
-      props.onChange?.(e);
-      if (props.name) {
-        const target = e.target.value;
-        let value: unknown;
+      (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
+        props.onChange?.(e);
+        if (props.name) {
+          const target = e.target.value;
+          let value: unknown;
 
-        if (preprocess) {
-          if (target.length === 0) {
-            value = undefined;
+          if (preprocess) {
+            if (target.length === 0) {
+              value = undefined;
+            } else {
+              value = preprocess(e.target.value);
+            }
           } else {
-            value = preprocess(e.target.value);
+            value = target;
           }
-        } else {
-          value = target;
-        }
 
-        if (setValue)
-          setValue(props.name, {
-            value,
-            // @ts-expect-error -- we know it's there, otherwise will be just undefined
-            label: e.target.selectedOptions?.[0]?.label ?? e.target.value,
-            touched: true,
-          });
-      }
-    };
+          if (setValue)
+            setValue(props.name, {
+              value,
+              // @ts-expect-error -- we know it's there, otherwise will be just undefined
+              label: e.target.selectedOptions?.[0]?.label ?? e.target.value,
+              touched: true,
+            });
+        }
+      };
 
   function getValue<T>(key: string) {
     return values[key] as FormEntry<T> | undefined;
