@@ -309,6 +309,8 @@ export function zodErrorToReadableMessage(error: z.ZodError) {
 
   if (!path.length) return `${issue.message}`;
 
+  if (issue.message === "Required") return `The field "${path}" is required`;
+
   return `${issue.message}`;
 }
 

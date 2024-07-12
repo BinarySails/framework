@@ -22,6 +22,7 @@ interface TooltipOptions {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   parent?: React.RefObject<HTMLElement>;
+  persistentOnHover?: boolean;
 }
 
 export function useTooltip({
@@ -30,6 +31,7 @@ export function useTooltip({
   open: controlledOpen,
   onOpenChange: setControlledOpen,
   parent,
+  persistentOnHover,
 }: TooltipOptions = {}) {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(initialOpen);
 
@@ -61,6 +63,7 @@ export function useTooltip({
   const hover = useHover(context, {
     move: false,
     enabled: controlledOpen == null,
+    delay: persistentOnHover ? 50 : undefined,
   });
   const focus = useFocus(context, {
     enabled: controlledOpen == null,

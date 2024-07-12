@@ -11,18 +11,22 @@ export function NeoModal({
   afterClose,
   open,
   disableAutoFocus,
+  avoidClickOutside,
 }: {
   children: React.ReactNode;
   onClose: () => void;
   afterClose?: () => void;
   open?: boolean;
   disableAutoFocus?: boolean;
+  avoidClickOutside?: boolean;
 }) {
   return (
     <Transition as={Fragment} show={open}>
       <Dialog
         className="relative z-50"
-        onClose={onClose}
+        onClose={() => {
+          if (!avoidClickOutside) onClose();
+        }}
         autoFocus={disableAutoFocus ? false : true}
       >
         <div className="fixed top-0 left-0 flex justify-center items-center w-full h-full">

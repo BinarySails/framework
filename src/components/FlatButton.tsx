@@ -122,18 +122,18 @@ FlatButton.displayName = "FlatButton";
 export interface ButtonConfirmationProps {
   submit?: boolean;
   confirm?:
-    | {
-        enabled: true;
-        message: React.ReactNode | React.ReactNode[];
-      }
-    | {
-        enabled: false;
-      };
+  | {
+    enabled: true;
+    message: React.ReactNode | React.ReactNode[];
+  }
+  | {
+    enabled: false;
+  };
 }
 
 export interface FlatButtonConfirmationProps
   extends ButtonProps,
-    ButtonConfirmationProps {}
+  ButtonConfirmationProps { }
 
 export const ButtonConfirmation = forwardRef<
   HTMLButtonElement,
@@ -384,6 +384,7 @@ export function MutedButton({
         className,
       )}
       {...props}
+      type="button"
       disabled={disabled}
     >
       {children}
