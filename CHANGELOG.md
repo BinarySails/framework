@@ -1,5 +1,11 @@
 # @binarysails/framework
 
+## 1.1.3
+
+### Patch Changes
+
+- 786e04f: Updated combobox and fix
+
 ## 1.1.2
 
 ### Patch Changes
