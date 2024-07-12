@@ -1,5 +1,11 @@
 # @binarysails/framework
 
+## 1.1.4
+
+### Patch Changes
+
+- 5f65adb: deps
+
 ## 1.1.3
 
 ### Patch Changes
