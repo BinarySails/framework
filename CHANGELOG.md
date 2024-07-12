@@ -1,5 +1,11 @@
 # @binarysails/framework
 
+## 1.1.5
+
+### Patch Changes
+
+- b60f878: package.json
+
 ## 1.1.4
 
 ### Patch Changes
