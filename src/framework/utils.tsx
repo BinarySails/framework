@@ -1,6 +1,6 @@
 import { RRule } from "rrule";
 import type { FormEntry } from "./forms";
-import { z } from "zod";
+import { z, ZodError } from "zod";
 
 export const DAYS = ["L", "M", "X", "J", "V", "S", "D"];
 export const DAYS_ORDER_JS = ["D", "L", "M", "X", "J", "V", "S"];
@@ -315,7 +315,11 @@ export function zodErrorToReadableMessage(error: z.ZodError) {
 }
 
 export function niceError(error: unknown) {
-  if (error instanceof z.ZodError) return zodErrorToReadableMessage(error);
+  if (
+    error instanceof z.ZodError ||
+    (error as { name: string }).name === "ZodError"
+  )
+    return zodErrorToReadableMessage(error as ZodError);
   if (error instanceof Error) return error.message;
   return String(error);
 }
