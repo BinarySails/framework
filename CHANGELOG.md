@@ -1,5 +1,11 @@
 # @binarysails/framework
 
+## 1.1.6
+
+### Patch Changes
+
+- 5609a36: changed depdendencies to be peer
+
 ## 1.1.5
 
 ### Patch Changes
