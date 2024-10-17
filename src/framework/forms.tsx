@@ -1295,6 +1295,11 @@ export function FormBox({
                     prev[id] = value;
                   });
                 },
+                removeEntry: (id) => {
+                  setValues((prev) => {
+                    delete prev[id];
+                  });
+                }
               }}
             >
               {children}
