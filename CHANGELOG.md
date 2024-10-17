@@ -1,5 +1,12 @@
 # @binarysails/framework
 
+## 1.1.7
+
+### Patch Changes
+
+- 28b4e75: changed depdendencies to be peer
+- 28b4e75: Added a remove entry for forms
+
 ## 1.1.6
 
 ### Patch Changes
