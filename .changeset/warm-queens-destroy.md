@@ -2,4 +2,4 @@
 "@binarysails/framework": patch
 ---
 
-package.json
+Added a remove entry for forms

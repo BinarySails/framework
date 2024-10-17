@@ -25,7 +25,7 @@ import {
   FlatButtonConfirmation,
   FlatButtonConfirmationProps,
 } from "../components/FlatButton";
-import { Updater, useImmer } from "use-immer";
+import { useImmer } from "use-immer";
 import {
   offset,
   size,
@@ -43,7 +43,6 @@ import es from "react-phone-input-2/lang/es.json";
 import { useDebounce } from "../hooks/use-debounce";
 import { useEscape } from "../hooks/use-esc";
 import { Transition, Dialog } from "@headlessui/react";
-import { Update } from "next/dist/build/swc";
 
 export function WeekDayPicker(props: {
   name?: string;
@@ -1133,11 +1132,13 @@ export function useModalFormControl(
 interface ContextProps {
   values: Record<string, FormEntry>;
   setValue: (id: string, value: FormEntry) => void;
+  removeEntry: (id: string) => void;
 }
 
 const Context = createContext<ContextProps>({
   values: {},
   setValue: () => {},
+  removeEntry: () => {},
 });
 
 export const Form = forwardRef<
@@ -1173,6 +1174,13 @@ export const Form = forwardRef<
             setValues((prev) => {
               prev[id] = value;
             });
+            onValuesChange?.(values);
+          },
+          removeEntry: (id) => {
+            setValues((prev) => {
+              delete prev[id];
+            });
+
             onValuesChange?.(values);
           },
         }}
