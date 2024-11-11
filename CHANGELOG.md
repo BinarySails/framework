@@ -1,5 +1,11 @@
 # @binarysails/framework
 
+## 1.1.8
+
+### Patch Changes
+
+- 73c50bb: Added a remove entry for forms
+
 ## 1.1.7
 
 ### Patch Changes
